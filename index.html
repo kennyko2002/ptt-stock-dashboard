@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PTT Stock 情緒儀表板</title>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<script>
+  // CDN fallback：jsdelivr 載入失敗時改用 unpkg
+  window.addEventListener('load', function () {
+    if (typeof echarts === 'undefined') {
+      var s = document.createElement('script');
+      s.src = 'https://unpkg.com/echarts@5.5.0/dist/echarts.min.js';
+      s.onload = function () { location.reload(); };
+      document.head.appendChild(s);
+    }
+  });
+</script>
 <style>
   :root {
     --bg: #0f1420; --panel: #1a2130; --border: #2a3448;
@@ -90,11 +101,30 @@
   </div>
 
 <script>
-const gaugeMain = echarts.init(document.getElementById('gaugeMain'));
-const historyChart = echarts.init(document.getElementById('historyChart'));
+let gaugeMain = null;
+let historyChart = null;
 let gaugeCharts = [];
 let todayData = null;
 let historyData = [];
+
+// 延遲到頁面完全載入（含 ECharts CDN）後初始化圖表，避免容器尺寸未定導致圖形擠壓
+window.addEventListener('load', () => {
+  if (typeof echarts === 'undefined') {
+    document.querySelectorAll('.gauge, .chart').forEach(el => {
+      el.innerHTML = '<div class="empty">ECharts 載入失敗（CDN 無法訪問）</div>';
+    });
+    return;
+  }
+  gaugeMain = echarts.init(document.getElementById('gaugeMain'));
+  historyChart = echarts.init(document.getElementById('historyChart'));
+  loadAll();
+  setInterval(loadAll, 60000);
+  window.addEventListener('resize', () => {
+    if (gaugeMain) gaugeMain.resize();
+    if (historyChart) historyChart.resize();
+    gaugeCharts.forEach(g => g.resize());
+  });
+});
 
 // 指標方向：positive=越高越好(綠高) / negative=越高越壞(紅高) / neutral=中性(藍) / index=綜合(紅黃綠)
 const METRIC_DIR = {
@@ -322,13 +352,7 @@ async function loadAll() {
 }
 
 document.getElementById('metricSelect').addEventListener('change', e => buildHistoryChart(e.target.value));
-window.addEventListener('resize', () => {
-  gaugeMain.resize();
-  historyChart.resize();
-  gaugeCharts.forEach(g => g.resize());
-});
-setInterval(loadAll, 60000); // 每分鐘自動更新
-loadAll();
+// 圖表初始化與 loadAll 已由 window load 事件統一觸發（見上方）
 </script>
 </body>
 </html>
