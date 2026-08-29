@@ -1,57 +1,57 @@
 {
-  "generated_at": "2026-08-29T20:57:32",
+  "generated_at": "2026-08-29T20:58:04",
   "today": {
-    "date": "2026/08/28",
-    "display_note": "（今日無資料，顯示最近日期 2026/08/28）",
-    "comment_count": 10,
-    "valid_comment_count": 10,
-    "emotion_index": 36.23,
-    "extreme_score": 0.0804,
+    "date": "2026/08/26",
+    "display_note": "（今日無資料，顯示最近有完整資料的日期 2026/08/26，1488 則）",
+    "comment_count": 1488,
+    "valid_comment_count": 1488,
+    "emotion_index": 48.12,
+    "extreme_score": 0.0291,
     "metrics": {
       "fomo": {
         "label": "FOMO 害怕錯過",
-        "mean": 0.01,
-        "weighted": 0.023,
-        "percentile": 0.0
+        "mean": 0.0851,
+        "weighted": 0.0858,
+        "percentile": null
       },
       "fear": {
         "label": "恐慌",
-        "mean": 0.08,
-        "weighted": 0.1837,
-        "percentile": 100.0
+        "mean": 0.1524,
+        "weighted": 0.1439,
+        "percentile": null
       },
       "greed": {
         "label": "貪婪",
-        "mean": 0.01,
-        "weighted": 0.023,
-        "percentile": 0.0
+        "mean": 0.112,
+        "weighted": 0.1098,
+        "percentile": null
       },
       "despair": {
         "label": "絕望",
-        "mean": 0.06,
-        "weighted": 0.1377,
-        "percentile": 100.0
+        "mean": 0.0967,
+        "weighted": 0.0892,
+        "percentile": null
       },
       "bullish": {
         "label": "看多",
-        "mean": 0.01,
-        "weighted": 0.023,
-        "percentile": 0.0
+        "mean": 0.1945,
+        "weighted": 0.1918,
+        "percentile": null
       },
       "bearish": {
         "label": "看空",
-        "mean": 0.08,
-        "weighted": 0.1837,
-        "percentile": 0.0
+        "mean": 0.2616,
+        "weighted": 0.2485,
+        "percentile": null
       },
       "sarcasm": {
         "label": "反串/諷刺",
-        "mean": 0.65,
-        "weighted": 0.5633,
-        "percentile": 100.0
+        "mean": 0.2756,
+        "weighted": 0.2599,
+        "percentile": null
       }
     },
-    "percentile_note": "（百分位：基於過去 2 天歷史）"
+    "percentile_note": ""
   },
   "history": [
     {
