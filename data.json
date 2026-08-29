@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-29T20:51:07",
+  "generated_at": "2026-08-29T20:57:32",
   "today": {
     "date": "2026/08/28",
     "display_note": "（今日無資料，顯示最近日期 2026/08/28）",
@@ -42,7 +42,7 @@
         "label": "看空",
         "mean": 0.08,
         "weighted": 0.1837,
-        "percentile": 100.0
+        "percentile": 0.0
       },
       "sarcasm": {
         "label": "反串/諷刺",
@@ -56,15 +56,15 @@
   "history": [
     {
       "date": "2026/08/26",
-      "emotion_index": 45.98,
-      "fomo": 0.0662,
-      "fear": 0.1427,
-      "greed": 0.0662,
-      "despair": 0.0701,
-      "bullish": 0.1013,
-      "bearish": 0.0701,
-      "sarcasm": 0.3519,
-      "comment_count": 20,
+      "emotion_index": 48.12,
+      "fomo": 0.0858,
+      "fear": 0.1439,
+      "greed": 0.1098,
+      "despair": 0.0892,
+      "bullish": 0.1918,
+      "bearish": 0.2485,
+      "sarcasm": 0.2599,
+      "comment_count": 1488,
       "taiex_close": null
     },
     {
