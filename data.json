@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-30T13:36:05",
+  "generated_at": "2026-08-30T13:55:25",
   "today": {
     "date": "2026/08/27",
     "display_note": "（今日無資料，顯示最近有完整資料的日期 2026/08/27，1487 則）",
@@ -65,7 +65,7 @@
       "bearish": 0.273,
       "sarcasm": 0.2465,
       "comment_count": 1487,
-      "taiex_close": null
+      "taiex_close": 46021.48
     },
     {
       "date": "2026/08/14",
@@ -78,7 +78,7 @@
       "bearish": 0.1953,
       "sarcasm": 0.2636,
       "comment_count": 1489,
-      "taiex_close": null
+      "taiex_close": 45811.01
     },
     {
       "date": "2026/08/17",
@@ -91,7 +91,7 @@
       "bearish": 0.2236,
       "sarcasm": 0.1442,
       "comment_count": 1490,
-      "taiex_close": null
+      "taiex_close": 45857.27
     },
     {
       "date": "2026/08/18",
@@ -104,7 +104,7 @@
       "bearish": 0.315,
       "sarcasm": 0.2415,
       "comment_count": 1489,
-      "taiex_close": null
+      "taiex_close": 45308.68
     },
     {
       "date": "2026/08/19",
@@ -117,7 +117,7 @@
       "bearish": 0.2334,
       "sarcasm": 0.1851,
       "comment_count": 1489,
-      "taiex_close": null
+      "taiex_close": 44719.35
     },
     {
       "date": "2026/08/20",
@@ -130,7 +130,7 @@
       "bearish": 0.2716,
       "sarcasm": 0.1769,
       "comment_count": 1489,
-      "taiex_close": null
+      "taiex_close": 44933.74
     },
     {
       "date": "2026/08/21",
@@ -143,7 +143,7 @@
       "bearish": 0.2113,
       "sarcasm": 0.1594,
       "comment_count": 1487,
-      "taiex_close": null
+      "taiex_close": 45224.29
     },
     {
       "date": "2026/08/24",
@@ -156,7 +156,7 @@
       "bearish": 0.3239,
       "sarcasm": 0.178,
       "comment_count": 1490,
-      "taiex_close": null
+      "taiex_close": 44762.32
     },
     {
       "date": "2026/08/25",
@@ -169,7 +169,7 @@
       "bearish": 0.2493,
       "sarcasm": 0.2166,
       "comment_count": 1491,
-      "taiex_close": null
+      "taiex_close": 45169.46
     },
     {
       "date": "2026/08/26",
@@ -182,7 +182,7 @@
       "bearish": 0.2485,
       "sarcasm": 0.2599,
       "comment_count": 1488,
-      "taiex_close": null
+      "taiex_close": 45832.62
     },
     {
       "date": "2026/08/27",
@@ -195,7 +195,7 @@
       "bearish": 0.2371,
       "sarcasm": 0.2264,
       "comment_count": 1487,
-      "taiex_close": null
+      "taiex_close": 45975.22
     },
     {
       "date": "2026/08/28",
@@ -208,7 +208,7 @@
       "bearish": 0.1989,
       "sarcasm": 0.4103,
       "comment_count": 10,
-      "taiex_close": null
+      "taiex_close": 46331.45
     }
   ]
 }
