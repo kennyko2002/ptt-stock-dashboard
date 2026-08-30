@@ -33,7 +33,7 @@
   .panel {
     background: var(--panel); border: 1px solid var(--border);
     border-radius: 10px; padding: 16px;
-    overflow: hidden;  /* 防止 ECharts canvas 溢出 panel 疊到別格 */
+    overflow: hidden;
     position: relative;
   }
   .panel h2 { font-size: 15px; color: var(--muted); margin-bottom: 12px; font-weight: 600; }
@@ -52,6 +52,12 @@
   button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
   .empty { color: var(--muted); padding: 30px; text-align: center; }
   #updatedAt { color: var(--muted); font-size: 12px; margin-left: auto; }
+  .info-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 600; margin-left: 8px;
+  }
+  .badge-pct { background: #1e3a5f; color: #4f8cff; }
+  .badge-raw { background: #3d2a1e; color: #f39c12; }
 </style>
 </head>
 <body>
@@ -77,14 +83,18 @@
   </div>
 
   <div class="panel" style="margin-bottom:16px;">
-    <h2>今日綜合指標（Emotion Index）<span id="eiState" style="margin-left:10px;font-size:14px;font-weight:700;"></span></h2>
+    <h2>
+      今日綜合指標（Emotion Index）
+      <span id="eiState" style="margin-left:10px;font-size:14px;font-weight:700;"></span>
+      <span id="eiBadge" class="info-badge" style="display:none;"></span>
+    </h2>
     <div id="gaugeMain" class="gauge gauge-main"></div>
   </div>
 
   <div class="grid grid-today" id="gaugeGrid"></div>
 
   <div class="panel" style="margin-top:16px;">
-    <h2>歷史指標 × 大盤指數（TAIEX）</h2>
+    <h2>歷史指標 × 大盤指數（TAIEX）<span id="histMode" class="info-badge badge-pct">百分位模式</span></h2>
     <div class="toolbar">
       <label style="color:var(--muted);font-size:13px;">情緒指標：</label>
       <select id="metricSelect">
@@ -103,32 +113,15 @@
   </div>
 
 <script>
+// 全域狀態
 let gaugeMain = null;
 let historyChart = null;
 let gaugeCharts = [];
 let todayData = null;
 let historyData = [];
+let percentileCache = {};  // 緩存各指標的百分位計算
 
-// 延遲到頁面完全載入（含 ECharts CDN）後初始化圖表，避免容器尺寸未定導致圖形擠壓
-window.addEventListener('load', () => {
-  if (typeof echarts === 'undefined') {
-    document.querySelectorAll('.gauge, .chart').forEach(el => {
-      el.innerHTML = '<div class="empty">ECharts 載入失敗（CDN 無法訪問）</div>';
-    });
-    return;
-  }
-  gaugeMain = echarts.init(document.getElementById('gaugeMain'));
-  historyChart = echarts.init(document.getElementById('historyChart'));
-  loadAll();
-  setInterval(loadAll, 60000);
-  window.addEventListener('resize', () => {
-    if (gaugeMain) gaugeMain.resize();
-    if (historyChart) historyChart.resize();
-    gaugeCharts.forEach(g => g.resize());
-  });
-});
-
-// 指標方向：positive=越高越好(綠高) / negative=越高越壞(紅高) / neutral=中性(藍) / index=綜合(紅黃綠)
+// 指標方向
 const METRIC_DIR = {
   emotion_index: 'index',
   bullish: 'positive', greed: 'positive',
@@ -142,18 +135,17 @@ function fmt(v, digits = 1) {
 }
 
 function gaugeOption(value, label, max = 100, dir = 'neutral') {
-  // 依方向決定漸層：0% → 100%
   let axisColor, progressColor;
-  if (dir === 'positive') {       // 低=壞(紅) 高=好(綠)
+  if (dir === 'positive') {
     axisColor = [[0.35, '#e74c3c'], [0.6, '#f39c12'], [1, '#27ae60']];
     progressColor = value > 60 ? '#27ae60' : value > 40 ? '#f39c12' : '#e74c3c';
-  } else if (dir === 'negative') { // 低=好(綠) 高=壞(紅) — 反向
+  } else if (dir === 'negative') {
     axisColor = [[0.35, '#27ae60'], [0.6, '#f39c12'], [1, '#e74c3c']];
     progressColor = value > 60 ? '#e74c3c' : value > 40 ? '#f39c12' : '#27ae60';
-  } else if (dir === 'index') {   // 綜合指數：低=恐慌(紅) 中=中性(黃) 高=樂觀(綠)
+  } else if (dir === 'index') {
     axisColor = [[0.4, '#e74c3c'], [0.6, '#f39c12'], [1, '#27ae60']];
     progressColor = value > 55 ? '#27ae60' : value < 45 ? '#e74c3c' : '#f39c12';
-  } else {                        // 中性：藍色漸層，僅顯示強度
+  } else {
     axisColor = [[0.5, '#3d7bf5'], [1, '#8fb3ff']];
     progressColor = '#4f8cff';
   }
@@ -163,12 +155,9 @@ function gaugeOption(value, label, max = 100, dir = 'neutral') {
       startAngle: 210, endAngle: -30,
       progress: { show: true, width: 12, itemStyle: { color: progressColor } },
       axisLine: { lineStyle: { width: 12, color: axisColor } },
-      // 指針：指向目前數值，明確顯示落在哪個顏色區間
       pointer: { show: true, length: '50%', width: 5, itemStyle: { color: progressColor } },
       anchor: { show: true, size: 9, itemStyle: { color: progressColor, borderColor: '#0f1420', borderWidth: 2 } },
-      // 外圍刻度不顯示（使用者要求，避免干擾）
       axisTick: { show: false }, splitLine: { show: false }, axisLabel: { show: false },
-      // 文字放底部，避免被指針擋到（title 在 detail 下方，保持間距）
       title: { show: true, offsetCenter: [0, '82%'], fontSize: 13, color: '#8b98ad' },
       detail: {
         valueAnimation: true, fontSize: 22, fontWeight: 'bold',
@@ -189,6 +178,41 @@ function emotionStateText(v) {
   return '🔴 恐慌';
 }
 
+/** 計算歷史百分位：將歷史數值轉換為 0-100 百分位 */
+function computePercentiles(data, metric) {
+  if (!data.length) return data;
+  
+  const cacheKey = metric;
+  if (percentileCache[cacheKey]) return percentileCache[cacheKey];
+  
+  // 提取有效數值
+  const vals = data
+    .map(d => d[metric])
+    .filter(v => v !== null && v !== undefined && !isNaN(v));
+  
+  if (!vals.length) return data;
+  
+  // 排序用於計算百分位
+  const sorted = [...vals].sort((a, b) => a - b);
+  
+  // 為每個資料點計算百分位
+  const result = data.map(d => {
+    const v = d[metric];
+    if (v === null || v === undefined || isNaN(v)) {
+      return { ...d, [metric + '_pct']: null };
+    }
+    // 百分位 = (小於等於該值的個數 / 總數) * 100
+    // 使用線性插值處理重複值
+    const countLT = sorted.filter(x => x < v).length;
+    const countEQ = sorted.filter(x => x === v).length;
+    const pct = ((countLT + countEQ * 0.5) / sorted.length) * 100;
+    return { ...d, [metric + '_pct']: pct };
+  });
+  
+  percentileCache[cacheKey] = result;
+  return result;
+}
+
 function buildTodayGauges(data) {
   // 今日日期/統計
   document.getElementById('statDate').textContent = data.date || '-';
@@ -202,10 +226,16 @@ function buildTodayGauges(data) {
   const ei = data.emotion_index ?? null;
   const stateText = emotionStateText(ei);
   document.getElementById('eiState').textContent = stateText;
+  
+  const eiBadge = document.getElementById('eiBadge');
   if (ei !== null) {
     gaugeMain.setOption(gaugeOption(ei, '綜合指數', 100, 'index'));
+    eiBadge.textContent = '即時值';
+    eiBadge.className = 'info-badge badge-raw';
+    eiBadge.style.display = 'inline-block';
   } else {
     gaugeMain.clear();
+    eiBadge.style.display = 'none';
   }
 
   // 各指標儀表網格
@@ -227,17 +257,37 @@ function buildTodayGauges(data) {
     div.innerHTML = `<div id="g-${key}" class="gauge"></div>`;
     grid.appendChild(div);
     const chart = echarts.init(document.getElementById(`g-${key}`));
-    // 有歷史百分位時顯示百分位（0-100，該指標在歷史中的相對位置），否則顯示原始加權值 ×100
+    
     const hasPct = m.percentile !== null && m.percentile !== undefined;
     const rawVal = (m.weighted ?? m.mean ?? 0) * 100;
     const val = hasPct ? m.percentile : rawVal;
     const label = hasPct ? m.label + ' 百分位' : m.label;
     chart.setOption(gaugeOption(val, label, 100, METRIC_DIR[key] || 'neutral'));
-    // 關鍵：容器剛插入 DOM 時寬度可能尚未計算（會得到 0/異常），
-    // 等下一幀佈局完成後強制 resize，確保 canvas 不溢出 panel
+    
+    // Badge 顯示模式
+    const badge = document.createElement('span');
+    badge.className = 'info-badge ' + (hasPct ? 'badge-pct' : 'badge-raw');
+    badge.textContent = hasPct ? '百分位' : '原始值';
+    badge.style.marginLeft = '8px';
+    div.querySelector('h2')?.appendChild(badge);
+    
     requestAnimationFrame(() => requestAnimationFrame(() => chart.resize()));
     gaugeCharts.push(chart);
   }
+}
+
+/** 計算指標的相對強度 (0-100 百分位) */
+function getRelativeValues(data, metric) {
+  const vals = data.map(d => d[metric]).filter(v => v !== null && v !== undefined && !isNaN(v));
+  if (!vals.length) return data.map(() => null);
+  
+  const sorted = [...vals].sort((a, b) => a - b);
+  return data.map(d => {
+    const v = d[metric];
+    if (v === null || v === undefined || isNaN(v)) return null;
+    const countLE = sorted.filter(x => x <= v).length;
+    return (countLE / sorted.length) * 100;
+  });
 }
 
 function buildHistoryChart(metric) {
@@ -249,19 +299,23 @@ function buildHistoryChart(metric) {
     return;
   }
 
-  const dates = historyData.map(d => d.date);
-  const sentimentVals = historyData.map(d => {
-    let v = d[metric];
-    if (metric !== 'emotion_index') v = (v ?? 0) * 100; // 0-1 → 0-100
-    return v;
-  });
-  const taiexVals = historyData.map(d => d.taiex_close);
+  // 計算百分位
+  const dataWithPct = computePercentiles(historyData, metric);
+  
+  const dates = dataWithPct.map(d => d.date);
+  
+  // 使用百分位 (0-100) 而非原始值
+  const sentimentVals = dataWithPct.map(d => d[metric + '_pct'] ?? null);
+  
+  const taiexVals = dataWithPct.map(d => d.taiex_close);
   const hasTaiex = taiexVals.some(v => v !== null && v !== undefined);
 
   const metricLabel = document.getElementById('metricSelect')
     .selectedOptions[0].textContent.split(' ')[0];
 
-  // 指標線顏色依方向：positive=綠 / negative=紅 / index=藍紫 / neutral=藍
+  // 更新歷史模式 badge
+  document.getElementById('histMode').textContent = '百分位模式';
+
   const dir = METRIC_DIR[metric] || 'neutral';
   const lineColor = dir === 'positive' ? '#27ae60' : dir === 'negative' ? '#e74c3c' : '#4f8cff';
 
@@ -271,13 +325,14 @@ function buildHistoryChart(metric) {
       formatter: params => {
         let s = `<b>${params[0].axisValue}</b><br/>`;
         params.forEach(p => {
-          const v = p.seriesName === 'TAIEX 收盤' ? fmt(p.value, 0) : fmt(p.value, 2);
-          s += `${p.marker} ${p.seriesName}: ${v}<br/>`;
+          const v = p.seriesName === 'TAIEX 收盤' ? fmt(p.value, 0) : fmt(p.value, 1);
+          const unit = p.seriesName === 'TAIEX 收盤' ? '' : '%';
+          s += `${p.marker} ${p.seriesName}: ${v}${unit}<br/>`;
         });
         return s;
       }
     },
-    legend: { data: [metricLabel, 'TAIEX 收盤'], textStyle: { color: '#8b98ad' }, top: 0 },
+    legend: { data: [metricLabel + ' 百分位', 'TAIEX 收盤'], textStyle: { color: '#8b98ad' }, top: 0 },
     grid: { left: 55, right: 70, top: 35, bottom: 40 },
     xAxis: {
       type: 'category', data: dates, boundaryGap: false,
@@ -286,29 +341,31 @@ function buildHistoryChart(metric) {
     },
     yAxis: [
       {
-        type: 'value', name: metricLabel,
+        type: 'value', name: metricLabel + ' (百分位)',
         min: 0, max: 100,
         axisLine: { lineStyle: { color: '#2a3448' } },
         splitLine: { lineStyle: { color: '#232c3f' } },
-        axisLabel: { color: '#8b98ad' }
+        axisLabel: { color: '#8b98ad', formatter: v => v + '%' }
       },
       {
         type: 'value', name: 'TAIEX', position: 'right',
         axisLine: { lineStyle: { color: '#2a3448' } },
         splitLine: { show: false },
-        axisLabel: { color: '#8b98ad', formatter: v => fmt(v, 0) }
+        axisLabel: { color: '#8b98ad', formatter: v => fmt(v, 0) },
+        // 關鍵：自動縮放以顯示漲跌變化
+        scale: true
       }
     ],
     series: [
       {
-        name: metricLabel, type: 'line', data: sentimentVals, smooth: true,
+        name: metricLabel + ' 百分位', type: 'line', data: sentimentVals, smooth: true,
         lineStyle: { width: 3, color: lineColor },
         itemStyle: { color: lineColor },
         areaStyle: { color: hexToRgba(lineColor, 0.12) },
         markLine: metric === 'emotion_index' ? {
           silent: true, symbol: 'none',
           lineStyle: { type: 'dashed', color: '#8b98ad' },
-          label: { color: '#8b98ad', formatter: '中性 50', position: 'insideEndTop' },
+          label: { color: '#8b98ad', formatter: '中位 50%', position: 'insideEndTop' },
           data: [{ yAxis: 50 }]
         } : undefined
       },
@@ -329,7 +386,6 @@ function hexToRgba(hex, alpha) {
 }
 
 async function loadAll() {
-  // 靜態模式：若同目錄有 data.json（靜態托管用），優先載入；否則走 API（本機模式）
   let t, h;
   try {
     const staticResp = await fetch('data.json', { cache: 'no-store' });
@@ -351,13 +407,64 @@ async function loadAll() {
   }
   todayData = t;
   historyData = h;
+  
+  // 清除百分位緩存
+  percentileCache = {};
+  
+  // 確保圖表已初始化
+  if (!gaugeMain || !historyChart) {
+    if (typeof echarts !== 'undefined') {
+      gaugeMain = echarts.init(document.getElementById('gaugeMain'));
+      historyChart = echarts.init(document.getElementById('historyChart'));
+    } else {
+      return;
+    }
+  }
+  
   buildTodayGauges(t);
   buildHistoryChart(document.getElementById('metricSelect').value);
   document.getElementById('updatedAt').textContent = '更新於 ' + new Date().toLocaleTimeString('zh-Hant');
 }
 
-document.getElementById('metricSelect').addEventListener('change', e => buildHistoryChart(e.target.value));
-// 圖表初始化與 loadAll 已由 window load 事件統一觸發（見上方）
+function emotionStateText(v) {
+  if (v === null || v === undefined) return '';
+  if (v > 60) return '🟢 樂觀';
+  if (v > 55) return '🟢 偏樂觀';
+  if (v >= 45) return '🟡 中性';
+  if (v >= 40) return '🔴 偏恐慌';
+  return '🔴 恐慌';
+}
+
+// 初始化
+let gaugeMain = null;
+let historyChart = null;
+let gaugeCharts = [];
+let todayData = null;
+let historyData = [];
+let percentileCache = {};
+
+window.addEventListener('load', () => {
+  if (typeof echarts === 'undefined') {
+    document.querySelectorAll('.gauge, .chart').forEach(el => {
+      el.innerHTML = '<div class="empty">ECharts 載入失敗（CDN 無法訪問）</div>';
+    });
+    return;
+  }
+  gaugeMain = echarts.init(document.getElementById('gaugeMain'));
+  historyChart = echarts.init(document.getElementById('historyChart'));
+  loadAll();
+  setInterval(loadAll, 60000);
+  window.addEventListener('resize', () => {
+    if (gaugeMain) gaugeMain.resize();
+    if (historyChart) historyChart.resize();
+    gaugeCharts.forEach(g => g.resize());
+  });
+});
+
+document.getElementById('metricSelect').addEventListener('change', e => {
+  percentileCache = {};  // 切換指標時清除緩存
+  buildHistoryChart(e.target.value);
+});
 </script>
 </body>
 </html>
