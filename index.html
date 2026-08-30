@@ -443,6 +443,23 @@ let todayData = null;
 let historyData = [];
 let percentileCache = {};
 
+// Debug helper
+function safeInitChart(id, name) {
+  try {
+    const el = document.getElementById(id);
+    if (!el) {
+      console.error(`[${name}] 找不到 DOM 元素: #${id}`);
+      return null;
+    }
+    const chart = echarts.init(el);
+    console.log(`[${name}] 初始化成功`);
+    return chart;
+  } catch (e) {
+    console.error(`[${name}] 初始化失敗:`, e);
+    return null;
+  }
+}
+
 window.addEventListener('load', () => {
   if (typeof echarts === 'undefined') {
     document.querySelectorAll('.gauge, .chart').forEach(el => {
@@ -450,14 +467,25 @@ window.addEventListener('load', () => {
     });
     return;
   }
-  gaugeMain = echarts.init(document.getElementById('gaugeMain'));
-  historyChart = echarts.init(document.getElementById('historyChart'));
+  
+  gaugeMain = safeInitChart('gaugeMain', 'gaugeMain');
+  historyChart = safeInitChart('historyChart', 'historyChart');
+  
+  if (!gaugeMain || !historyChart) {
+    console.error('圖表初始化失敗，停止載入');
+    return;
+  }
+  
   loadAll();
   setInterval(loadAll, 60000);
   window.addEventListener('resize', () => {
-    if (gaugeMain) gaugeMain.resize();
-    if (historyChart) historyChart.resize();
-    gaugeCharts.forEach(g => g.resize());
+    try {
+      if (gaugeMain) gaugeMain.resize();
+      if (historyChart) historyChart.resize();
+      gaugeCharts.forEach(g => g.resize());
+    } catch (e) {
+      console.error('resize 錯誤:', e);
+    }
   });
 });
 
