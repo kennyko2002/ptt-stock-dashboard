@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-30T22:15:19",
+  "generated_at": "2026-08-30T22:24:18",
   "today": {
     "date": "2026/08/27",
     "display_note": "（今日無資料，顯示最近有完整資料的日期 2026/08/27，1487 則）",
@@ -18,40 +18,40 @@
         "label": "恐慌",
         "mean": 0.1552,
         "weighted": 0.1447,
-        "percentile": 20.7
+        "percentile": 20.0
       },
       "greed": {
         "label": "貪婪",
         "mean": 0.1173,
         "weighted": 0.1161,
-        "percentile": 96.5
+        "percentile": 96.7
       },
       "despair": {
         "label": "絕望",
         "mean": 0.0911,
         "weighted": 0.0824,
-        "percentile": 10.3
+        "percentile": 10.0
       },
       "bullish": {
         "label": "看多",
         "mean": 0.1922,
         "weighted": 0.1871,
-        "percentile": 96.5
+        "percentile": 96.7
       },
       "bearish": {
         "label": "看空",
         "mean": 0.2533,
         "weighted": 0.2371,
-        "percentile": 13.8
+        "percentile": 13.3
       },
       "sarcasm": {
         "label": "反串/諷刺",
         "mean": 0.2335,
         "weighted": 0.2264,
-        "percentile": 79.3
+        "percentile": 80.0
       }
     },
-    "percentile_note": "（百分位：基於過去 30 天歷史）"
+    "percentile_note": "（百分位：基於過去 31 天歷史）"
   },
   "history": [
     {
@@ -196,6 +196,19 @@
       "sarcasm": 0.2132,
       "comment_count": 1485,
       "taiex_close": 45631.59
+    },
+    {
+      "date": "2026/07/16",
+      "emotion_index": 42.31,
+      "fomo": 0.05,
+      "fear": 0.1745,
+      "greed": 0.0754,
+      "despair": 0.1047,
+      "bullish": 0.1616,
+      "bearish": 0.2863,
+      "sarcasm": 0.2012,
+      "comment_count": 1488,
+      "taiex_close": 45624.98
     },
     {
       "date": "2026/08/03",
