@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-30T14:49:06",
+  "generated_at": "2026-08-30T14:58:05",
   "today": {
     "date": "2026/08/27",
     "display_note": "（今日無資料，顯示最近有完整資料的日期 2026/08/27，1487 則）",
@@ -56,14 +56,14 @@
   "history": [
     {
       "date": "2026/08/03",
-      "emotion_index": 43.91,
-      "fomo": 0.0483,
-      "fear": 0.1593,
-      "greed": 0.0777,
-      "despair": 0.0885,
-      "bullish": 0.1657,
-      "bearish": 0.2818,
-      "sarcasm": 0.2169,
+      "emotion_index": 43.66,
+      "fomo": 0.054,
+      "fear": 0.1691,
+      "greed": 0.0837,
+      "despair": 0.0954,
+      "bullish": 0.1672,
+      "bearish": 0.288,
+      "sarcasm": 0.2258,
       "comment_count": 1475,
       "taiex_close": 43386.41
     },
