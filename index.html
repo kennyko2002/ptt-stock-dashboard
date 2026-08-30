@@ -426,23 +426,6 @@ async function loadAll() {
   document.getElementById('updatedAt').textContent = '更新於 ' + new Date().toLocaleTimeString('zh-Hant');
 }
 
-function emotionStateText(v) {
-  if (v === null || v === undefined) return '';
-  if (v > 60) return '🟢 樂觀';
-  if (v > 55) return '🟢 偏樂觀';
-  if (v >= 45) return '🟡 中性';
-  if (v >= 40) return '🔴 偏恐慌';
-  return '🔴 恐慌';
-}
-
-// 初始化
-let gaugeMain = null;
-let historyChart = null;
-let gaugeCharts = [];
-let todayData = null;
-let historyData = [];
-let percentileCache = {};
-
 // Debug helper
 function safeInitChart(id, name) {
   try {
