@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-31T13:15:26",
+  "generated_at": "2026-08-31T13:24:19",
   "today": {
     "date": "2026/08/28",
     "display_note": "（今日無資料，顯示最近有完整資料的日期 2026/08/28，1489 則）",
@@ -51,7 +51,7 @@
         "percentile": 36.7
       }
     },
-    "percentile_note": "（百分位：基於過去 51 天歷史）"
+    "percentile_note": "（百分位：基於過去 52 天歷史）"
   },
   "history": [
     {
@@ -157,6 +157,19 @@
       "sarcasm": 0.199,
       "comment_count": 1488,
       "taiex_close": 46255.26
+    },
+    {
+      "date": "2026/06/26",
+      "emotion_index": 43.83,
+      "fomo": 0.0574,
+      "fear": 0.1731,
+      "greed": 0.0925,
+      "despair": 0.1001,
+      "bullish": 0.1761,
+      "bearish": 0.2763,
+      "sarcasm": 0.2061,
+      "comment_count": 1487,
+      "taiex_close": 44571.76
     },
     {
       "date": "2026/07/01",
