@@ -358,10 +358,8 @@ function buildHistoryChart(metric) {
     ],
     series: [
       {
-        name: metricLabel + ' 百分位', type: 'line', data: sentimentVals, smooth: true,
-        lineStyle: { width: 3, color: lineColor },
-        itemStyle: { color: lineColor },
-        areaStyle: { color: hexToRgba(lineColor, 0.12) },
+        name: metricLabel + ' 百分位', type: 'bar', data: sentimentVals, barWidth: '60%',
+        itemStyle: { color: lineColor, borderRadius: [4, 4, 0, 0] },
         markLine: metric === 'emotion_index' ? {
           silent: true, symbol: 'none',
           lineStyle: { type: 'dashed', color: '#8b98ad' },
