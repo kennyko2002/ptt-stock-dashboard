@@ -1,54 +1,54 @@
 {
-  "generated_at": "2026-09-27T08:02:20",
+  "generated_at": "2026-09-28T08:02:31",
   "today": {
     "date": "2026/09/25",
     "display_note": "（今日無資料，顯示最近有完整資料的日期 2026/09/25，1493 則）",
     "comment_count": 1493,
     "valid_comment_count": 1493,
-    "emotion_index": 45.79,
-    "extreme_score": 0.0441,
+    "emotion_index": 45.55,
+    "extreme_score": 0.0457,
     "metrics": {
       "fomo": {
         "label": "FOMO 害怕錯過",
-        "mean": 0.1133,
-        "weighted": 0.1152,
-        "percentile": 81.7
+        "mean": 0.1152,
+        "weighted": 0.1159,
+        "percentile": 83.3
       },
       "fear": {
         "label": "恐慌",
-        "mean": 0.2088,
-        "weighted": 0.2034,
-        "percentile": 56.7
+        "mean": 0.2161,
+        "weighted": 0.2073,
+        "percentile": 66.7
       },
       "greed": {
         "label": "貪婪",
-        "mean": 0.1405,
-        "weighted": 0.135,
-        "percentile": 50.0
+        "mean": 0.1399,
+        "weighted": 0.1327,
+        "percentile": 43.3
       },
       "despair": {
         "label": "絕望",
-        "mean": 0.1402,
-        "weighted": 0.131,
-        "percentile": 60.0
+        "mean": 0.1428,
+        "weighted": 0.1304,
+        "percentile": 56.7
       },
       "bullish": {
         "label": "看多",
-        "mean": 0.2093,
-        "weighted": 0.2128,
-        "percentile": 60.0
+        "mean": 0.2091,
+        "weighted": 0.2117,
+        "percentile": 48.3
       },
       "bearish": {
         "label": "看空",
-        "mean": 0.3109,
-        "weighted": 0.3055,
-        "percentile": 46.7
+        "mean": 0.3188,
+        "weighted": 0.3094,
+        "percentile": 58.3
       },
       "sarcasm": {
         "label": "反串/諷刺",
-        "mean": 0.1792,
-        "weighted": 0.1708,
-        "percentile": 13.3
+        "mean": 0.1768,
+        "weighted": 0.1671,
+        "percentile": 3.3
       }
     },
     "percentile_note": "（百分位：基於過去 83 天歷史）"
@@ -1122,14 +1122,14 @@
     },
     {
       "date": "2026/09/25",
-      "emotion_index": 45.79,
-      "fomo": 0.1152,
-      "fear": 0.2034,
-      "greed": 0.135,
-      "despair": 0.131,
-      "bullish": 0.2128,
-      "bearish": 0.3055,
-      "sarcasm": 0.1708,
+      "emotion_index": 45.55,
+      "fomo": 0.1159,
+      "fear": 0.2073,
+      "greed": 0.1327,
+      "despair": 0.1304,
+      "bullish": 0.2117,
+      "bearish": 0.3094,
+      "sarcasm": 0.1671,
       "comment_count": 1493,
       "taiex_close": null
     }
