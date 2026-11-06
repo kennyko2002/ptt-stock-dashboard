@@ -1,57 +1,57 @@
 {
-  "generated_at": "2026-11-05T08:02:17",
+  "generated_at": "2026-11-06T08:02:19",
   "today": {
-    "date": "2026/11/04",
-    "display_note": "（今日無資料，顯示最近有完整資料的日期 2026/11/04，1488 則）",
-    "comment_count": 1488,
-    "valid_comment_count": 1488,
-    "emotion_index": 45.07,
-    "extreme_score": 0.0516,
+    "date": "2026/11/05",
+    "display_note": "（今日無資料，顯示最近有完整資料的日期 2026/11/05，1550 則）",
+    "comment_count": 1550,
+    "valid_comment_count": 1550,
+    "emotion_index": 43.48,
+    "extreme_score": 0.0575,
     "metrics": {
       "fomo": {
         "label": "FOMO 害怕錯過",
-        "mean": 0.0923,
-        "weighted": 0.0946,
-        "percentile": 6.7
+        "mean": 0.0991,
+        "weighted": 0.0999,
+        "percentile": 16.7
       },
       "fear": {
         "label": "恐慌",
-        "mean": 0.1949,
-        "weighted": 0.1977,
-        "percentile": 33.3
+        "mean": 0.2118,
+        "weighted": 0.215,
+        "percentile": 80.0
       },
       "greed": {
         "label": "貪婪",
-        "mean": 0.1302,
-        "weighted": 0.1313,
-        "percentile": 53.3
+        "mean": 0.1291,
+        "weighted": 0.1274,
+        "percentile": 30.0
       },
       "despair": {
         "label": "絕望",
-        "mean": 0.1317,
-        "weighted": 0.1269,
-        "percentile": 23.3
+        "mean": 0.1447,
+        "weighted": 0.1428,
+        "percentile": 73.3
       },
       "bullish": {
         "label": "看多",
-        "mean": 0.202,
-        "weighted": 0.2075,
-        "percentile": 40.0
+        "mean": 0.2015,
+        "weighted": 0.2029,
+        "percentile": 26.7
       },
       "bearish": {
         "label": "看空",
-        "mean": 0.3194,
-        "weighted": 0.3271,
-        "percentile": 76.7
+        "mean": 0.335,
+        "weighted": 0.3428,
+        "percentile": 83.3
       },
       "sarcasm": {
         "label": "反串/諷刺",
-        "mean": 0.1756,
-        "weighted": 0.1722,
-        "percentile": 20.0
+        "mean": 0.171,
+        "weighted": 0.1691,
+        "percentile": 16.7
       }
     },
-    "percentile_note": "（百分位：基於過去 110 天歷史）"
+    "percentile_note": "（百分位：基於過去 111 天歷史）"
   },
   "history": [
     {
@@ -1483,6 +1483,19 @@
       "sarcasm": 0.1722,
       "comment_count": 1488,
       "taiex_close": 42948.91
+    },
+    {
+      "date": "2026/11/05",
+      "emotion_index": 43.48,
+      "fomo": 0.0999,
+      "fear": 0.215,
+      "greed": 0.1274,
+      "despair": 0.1428,
+      "bullish": 0.2029,
+      "bearish": 0.3428,
+      "sarcasm": 0.1691,
+      "comment_count": 1550,
+      "taiex_close": 41574.72
     }
   ]
 }
